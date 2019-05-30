@@ -1,0 +1,11 @@
+*.log
+*.lock
+*.tmp
+*.source
+.DS_Store
+.gen*
+.idea
+*.iml
+*.old
+.old/
+target/

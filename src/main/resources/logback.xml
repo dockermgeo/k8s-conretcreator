@@ -1,0 +1,38 @@
+<configuration>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <target>System.out</target>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %marker %-5level %logger{36} %msg%n </pattern>
+            <!-- -IO- %d{HH:mm:ss.SSS} [%thread] %marker %-5level %logger{36} %msg%n -->
+        </encoder>
+    </appender>
+
+    <appender name="SILENT" class="ch.qos.logback.core.ConsoleAppender">
+        <target>System.out</target>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS}</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="io.fabric8.kubernetes.client" level="off" additivity="false">
+        <appender-ref ref="SILENT"/>
+    </logger>
+
+    <!--
+    <appender name="CONSOLE" class="de.mgeo">
+        <target>System.out</target>
+        <encoder>
+            <pattern>- - - %d{HH:mm:ss.SSS} [%thread] %marker %-5level %logger{36} %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    -->
+    <logger name="de.mgeo" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
+    <root level="">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+</configuration>
