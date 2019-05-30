@@ -47,6 +47,7 @@ public class ConretCreator implements Runnable {
 
 
     public void run() {
+
         if (System.getenv("TARGET_FILE") != null) {
             System.setProperty("TARGET_FILE", System.getenv("TARGET_FILE"));
         }
@@ -56,10 +57,11 @@ public class ConretCreator implements Runnable {
             DEFAULT_LOGLEVEL = System.getenv("LOG_LEVEL");
         }
         System.setProperty("LOG_LEVEL", DEFAULT_LOGLEVEL);
-
+        System.setProperty("DEBUG_MODE", "FALSE");
         if (debuggy) {
             System.setProperty("LOG_LEVEL", "DEBUG");
             System.setProperty("DELETE_FILE", "FALSE");
+            System.setProperty("DEBUG_MODE", "TRUE");
         }
 
         if (cr_io) {

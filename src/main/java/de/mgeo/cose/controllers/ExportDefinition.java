@@ -20,8 +20,8 @@ public class ExportDefinition {
             final List<Map<String, Object>> DATA = (List<Map<String, Object>>) yamlMaps.get("data");
 
             String corename = yamlMaps.get("name") + "";
-            addOut(" containers:");
-            addOut("    env:");
+            addOut("containers:");
+            addOut("\tenv:");
             for (int z = 0; z < DATA.size(); z++) {
                 Object name = DATA.get(z).get("name");
                 printSecretstyle(corename, name.toString().toUpperCase(), name.toString());
@@ -35,30 +35,32 @@ public class ExportDefinition {
     }
 
     public void printVolumestyle(String secretname) {
-        addOut("    volumeMounts:");
-        addOut("        - name: " +secretname+"-volume");
-        addOut("          mountPath: /etc/secrets");
-        addOut("          readOnly: true");
+        String filequalifier="-files";
+
+        addOut("\tvolumeMounts:");
+        addOut("\t\t- name: " +secretname+"-volume");
+        addOut("\t\t  mountPath: /etc/secrets");
+        addOut("\t\t  readOnly: true");
 
         addOut("volumes:");
-        addOut("    - name: "+secretname+"-volume");
-        addOut("      secret:");
-        addOut("        secretName: "+secretname);
+        addOut("\t\t- name: "+secretname+"-volume");
+        addOut("\t\t  secret:");
+        addOut("\t\t\tsecretName: "+secretname+filequalifier);
     }
     public void printConfigmapstyle(String cfgmapname, String envname, String refkey) {
-        addOut("    - name: " + envname);
-        addOut("    valueFrom:");
-        addOut("      configMapKeyRef:");
-        addOut("        name: " + cfgmapname);
-        addOut("        key: " + refkey);
+        addOut("\t- name: " + envname);
+        addOut("\t  valueFrom:");
+        addOut("\t\tconfigMapKeyRef:");
+        addOut("\t\t\tname: " + cfgmapname);
+        addOut("\t\t\tkey: " + refkey);
     }
 
     public void printSecretstyle(String secretname, String envname, String refkey) {
-        addOut("    - name: " + envname);
-        addOut("    valueFrom:");
-        addOut("      secretKeyRef:");
-        addOut("        name: " + secretname);
-        addOut("        key: " + refkey);
+        addOut("\t- name: " + envname);
+        addOut("\t  valueFrom:");
+        addOut("\t\tsecretKeyRef:");
+        addOut("\t\t\tname: " + secretname);
+        addOut("\t\t\tkey: " + refkey);
     }
 
     private void addOut(String output) {
