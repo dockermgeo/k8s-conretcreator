@@ -1,15 +1,16 @@
 APP=conretcreator
-APP_VER=2.4
+APP_VER=2.5
 JAVA_VERSION="jdk18"
 JAR="${APP}-${JAVA_VERSION}-${APP_VER}.jar"
 
-install: jc.run
+install: git.clone
 
 run: jc.run
-
 compile: jc.build
-
 build: jc.build jc.run
+
+git.clone:
+	git clone https://github.com/dockermgeo/k8s-conretcreator
 
 jc.build:
 	mvn clean install

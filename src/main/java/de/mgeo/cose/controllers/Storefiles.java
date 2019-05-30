@@ -1,9 +1,8 @@
 package de.mgeo.cose.controllers;
 
-import de.mgeo.cose.lib.AppTools;
-import de.mgeo.cose.lib.OpenshiftCommands;
+import de.mgeo.cose.lib.TerminalReader;
+import de.mgeo.cose.lib.openshift.OpenshiftCommandProcs;
 import org.apache.commons.io.FileUtils;
-import org.json.simple.JSONObject;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.*;
@@ -15,13 +14,13 @@ public class Storefiles {
     private  String outputfilename = "";
 
     private  boolean is_filedeltable = true;
-    OpenshiftCommands occ;
+    OpenshiftCommandProcs occ;
     public Storefiles(File inputfile) {
         this.setOutputfilename(inputfile.getParent() + "/.gen-" + inputfile.getName() + ".json");
         Yaml yaml = new Yaml();
         Reader yamlFile = null;
-        AppTools tools = new AppTools();
-        occ = new OpenshiftCommands();
+        TerminalReader tools = new TerminalReader();
+        occ = new OpenshiftCommandProcs();
 
         if (System.getProperty("DELETE_FILE") != null) {
             if (System.getProperty("DELETE_FILE").equals("FALSE")) {
@@ -40,12 +39,12 @@ public class Storefiles {
 
             String zkind = yamlMaps.get("kind") + "";
             if (zkind.isEmpty()) {
-                zkind = tools.getFromCommandline("Secret or ConfigMap");
+                zkind = tools.getInput("Secret or ConfigMap");
             }
 
             String zname = yamlMaps.get("name") + "";
             if (zname.isEmpty()) {
-                zname = tools.getFromCommandline("Name of this Definition");
+                zname = tools.getInput("Name of this Definition");
             }
 
             occ.deleteKeystoreEntry(zkind, zname+"-files", zkind.toLowerCase());

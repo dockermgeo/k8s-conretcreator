@@ -1,7 +1,7 @@
 package de.mgeo.cose.controllers;
 
-import de.mgeo.cose.lib.AppTools;
-import de.mgeo.cose.lib.OpenshiftCommands;
+import de.mgeo.cose.lib.TerminalReader;
+import de.mgeo.cose.lib.openshift.OpenshiftCommandProcs;
 import org.json.simple.JSONObject;
 import org.yaml.snakeyaml.Yaml;
 
@@ -14,15 +14,15 @@ public class ConfigCreatorOc {
     private  String outputfilename = "";
     private  JSONObject SAVEDATA;
     private  boolean is_filedeltable = true;
-    OpenshiftCommands occ;
+    OpenshiftCommandProcs occ;
 
     public ConfigCreatorOc(File inputfile) {
         setOutputfilename(inputfile.getParent() + "/.gen-" + inputfile.getName() + ".json");
 
         Yaml yaml = new Yaml();
         Reader yamlFile = null;
-        AppTools tools = new AppTools();
-        occ = new OpenshiftCommands();
+        TerminalReader tools = new TerminalReader();
+        occ = new OpenshiftCommandProcs();
 
         if (System.getProperty("DELETE_FILE") != null) {
             if (System.getProperty("DELETE_FILE").equals("FALSE")) {
@@ -42,12 +42,12 @@ public class ConfigCreatorOc {
 
             String zkind = yamlMaps.get("kind") + "";
             if (zkind.isEmpty()) {
-                zkind = tools.getFromCommandline("Secret or ConfigMap");
+                zkind = tools.getInput("Secret or ConfigMap");
             }
 
             String zname = yamlMaps.get("name") + "";
             if (zname.isEmpty()) {
-                zname = tools.getFromCommandline("Name of this Definition");
+                zname = tools.getInput("Name of this Definition");
             }
 
             JSONObject stringData = new JSONObject();
@@ -63,7 +63,7 @@ public class ConfigCreatorOc {
                     }
                     else {
                         //From CLI
-                        value = tools.getFromCommandline(desc.toString());
+                        value = tools.getInput(desc.toString());
                     }
                 }
                 stringData.put(name, value);

@@ -3,9 +3,9 @@ package de.mgeo.cose;
 import de.mgeo.cose.controllers.ConfigCreatorIo;
 import de.mgeo.cose.controllers.ExportDefinition;
 import de.mgeo.cose.controllers.Storefiles;
-import de.mgeo.cose.lib.AppTools;
+import de.mgeo.cose.lib.TerminalReader;
 import de.mgeo.cose.lib.Logging;
-import de.mgeo.cose.lib.OpenshiftCommands;
+import de.mgeo.cose.lib.openshift.OpenshiftCommandProcs;
 import de.mgeo.cose.lib.openshift.OpenshiftClientProvider;
 import io.fabric8.openshift.client.DefaultOpenShiftClient;
 import org.slf4j.Logger;
@@ -37,7 +37,10 @@ public class ConretCreator implements Runnable {
     private boolean xport;
 
     @Option(names = {"-z", "--debug"}, description = "Enable mode DEBUG")
-    private boolean debuggy;
+    private boolean isdebug;
+
+    @Option(names = {"-v", "--visible"}, description = "Make cli-inputfields viewable")
+    private boolean isvisible;
 
     @Option(names = {"-i", "--read"}, paramLabel = "FILE", description = "* Read INPUT from this YAML[s]")
     private boolean[] fileparam = new boolean[0];
@@ -57,11 +60,16 @@ public class ConretCreator implements Runnable {
             DEFAULT_LOGLEVEL = System.getenv("LOG_LEVEL");
         }
         System.setProperty("LOG_LEVEL", DEFAULT_LOGLEVEL);
-        System.setProperty("DEBUG_MODE", "FALSE");
-        if (debuggy) {
+
+        System.setProperty("IS_VISIBLE", "FALSE");
+        if (isvisible) {
+            System.setProperty("IS_VISIBLE", "TRUE");
+        }
+
+        if (isdebug) {
             System.setProperty("LOG_LEVEL", "DEBUG");
             System.setProperty("DELETE_FILE", "FALSE");
-            System.setProperty("DEBUG_MODE", "TRUE");
+            System.setProperty("IS_VISIBLE", "TRUE");
         }
 
         if (cr_io) {
@@ -93,7 +101,7 @@ public class ConretCreator implements Runnable {
 //        }
 
         if (storefiles) {
-            OpenshiftCommands occ = new OpenshiftCommands();
+            OpenshiftCommandProcs occ = new OpenshiftCommandProcs();
             login(occ);
             if (fileparam.length > 0) {
                 File f = inputFiles[0];
@@ -118,27 +126,27 @@ public class ConretCreator implements Runnable {
         }
     }
 
-    private void login(OpenshiftCommands occ) {
-        AppTools apt = new AppTools();
+    private void login(OpenshiftCommandProcs occ) {
+        TerminalReader apt = new TerminalReader();
 
         if (occ.isLogin() == false) {
             log.error("You must be logged in, into your K8-System!");
             System.exit(0);
         }
 
-        apt.out("\nWorking on:");
-        apt.out("\t- CLUSTER: " + occ.getClusterName().replaceAll("\n", ""));
-        apt.out("\t- PROJECT: " + occ.getNamespaceName().replaceAll("\n", "").replaceAll("\"", ""));
-        apt.out("");
+        System.out.println("\nWorking on:");
+        System.out.println("\t- CLUSTER: " + occ.getClusterName().replaceAll("\n", ""));
+        System.out.println("\t- PROJECT: " + occ.getNamespaceName().replaceAll("\n", "").replaceAll("\"", ""));
+        System.out.println("");
     }
 
     private void login(DefaultOpenShiftClient client) {
-        AppTools apt = new AppTools();
+        TerminalReader apt = new TerminalReader();
 
-        apt.out("\nWorking on:");
-        apt.out("\t- CLUSTER: " + client.getMasterUrl());
-        apt.out("\t- PROJECT: " + client.getNamespace());
-        apt.out("");
+        System.out.println("\nWorking on:");
+        System.out.println("\t- CLUSTER: " + client.getMasterUrl());
+        System.out.println("\t- PROJECT: " + client.getNamespace());
+        System.out.println("");
 
         try {
             log.trace(client.projects().list().toString());

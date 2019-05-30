@@ -1,6 +1,6 @@
 package de.mgeo.cose.controllers;
 
-import de.mgeo.cose.lib.AppTools;
+import de.mgeo.cose.lib.TerminalReader;
 import de.mgeo.cose.lib.Logging;
 import de.mgeo.cose.lib.openshift.OpenshiftStore;
 import de.mgeo.cose.model.StoreConfigMap;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ConfigCreatorIo {
-    private static AppTools tools = new AppTools();
+    private static TerminalReader tools = new TerminalReader();
     //private final static Logger log = LoggerFactory.getLogger(ConfigCreatorIo.class);
     private static Logging logging = new Logging(ConfigCreatorIo.class.toString());
     private static Logger log = logging.getLogger();
@@ -37,12 +37,12 @@ public class ConfigCreatorIo {
 
         String kind = yamlMaps.get("kind") + "";
         if (kind.isEmpty()) {
-            kind = tools.getFromCommandline("Secret or ConfigMap");
+            kind = tools.getInput("Secret or ConfigMap");
         }
 
         String zname = yamlMaps.get("name") + "";
         if (zname.isEmpty()) {
-            zname = tools.getFromCommandline("Name of this Definition");
+            zname = tools.getInput("Name of this Definition");
         }
 
         Boolean isSecret = true;
@@ -64,7 +64,7 @@ public class ConfigCreatorIo {
                     value = System.getProperty(ENVKEY);
                 } else {
                     //From CLI
-                    value = tools.getFromCommandline(desc.toString());
+                    value = tools.getInput(desc.toString());
                 }
             }
             if (isSecret) {

@@ -1,11 +1,12 @@
 package de.mgeo.cose.lib.openshift;
 
-import de.mgeo.cose.lib.AppTools;
+import de.mgeo.cose.lib.TerminalReader;
 import de.mgeo.cose.lib.Logging;
 import io.fabric8.openshift.client.DefaultOpenShiftClient;
 import io.fabric8.openshift.client.OpenShiftConfig;
 import io.fabric8.openshift.client.OpenShiftConfigBuilder;
 import org.slf4j.Logger;
+
 
 public class OpenshiftClientProvider {
     private static final String DEFAULT_CLUSTER = "https://cluster.mgeo.de:8443";
@@ -13,7 +14,7 @@ public class OpenshiftClientProvider {
     private String username;
     private String password;
     private String clusterName;
-    private AppTools tools = new AppTools();
+    private TerminalReader tools = new TerminalReader();
     private static Logging logging = new Logging(OpenshiftClientProvider.class.toString());
     private static Logger log = logging.getLogger();
     private boolean loginState;
@@ -50,7 +51,7 @@ public class OpenshiftClientProvider {
             System.setProperty(envname, System.getenv(envname));
             return System.getenv(envname);
         } else {
-            String str = tools.getFromCommandline(question);
+            String str = tools.getInput(question);
             System.setProperty(envname, str);
             return str;
         }
