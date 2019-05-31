@@ -17,18 +17,45 @@ public class OpenshiftClientProvider {
     private TerminalReader tools = new TerminalReader();
     private static Logging logging = new Logging(OpenshiftClientProvider.class.toString());
     private static Logger log = logging.getLogger();
-    private boolean loginState;
 
+    public OpenshiftClientProvider(String namespace, String clustername) {
+
+        //Cluster & Namespace
+        this.clusterName = setVarValue("OCP_CLUSTER", clustername);;
+        if (this.clusterName.isEmpty()) {
+            this.clusterName = DEFAULT_CLUSTER;
+            setVarValue("OCP_CLUSTER",  this.clusterName);
+        }
+        this.namespace = setVarValue("OCP_NAMESPACE", namespace);
+
+        //Commandline
+        this.username = setVarInput("OCP_USERNAME", "[OCP_USERNAME] Your OCP Username:",false);
+        this.password = setVarInput("OCP_PASSWORD", "[OCP_PASSWORD] Your OCP Password:",true);
+        String[] checkers = {"OCP_CLUSTER", "OCP_NAMESPACE", "OCP_USERNAME", "OCP_PASSWORD"};
+        Boolean isError = false;
+        String errMsg = "";
+        for (String varName : checkers) {
+            if (System.getProperty(varName) == null || System.getProperty(varName).isEmpty()) {
+                errMsg += "\t* Missing ENV: " + varName + "\n";
+                isError = true;
+            }
+        }
+
+        if (isError) {
+            log.error("\n" + errMsg);
+            System.exit(1);
+        }
+    }
     public OpenshiftClientProvider() {
 
-        this.clusterName = setVars("OCP_CLUSTER", "[OCP_CLUSTER] Name of cluster '" + DEFAULT_CLUSTER + "'");
+        this.clusterName = setVarInput("OCP_CLUSTER", "[OCP_CLUSTER] Name of cluster '" + DEFAULT_CLUSTER + "'",false);
         if (this.clusterName.isEmpty()) {
             this.clusterName = DEFAULT_CLUSTER;
             System.setProperty("OCP_CLUSTER", this.clusterName);
         }
-        this.namespace = setVars("OCP_NAMESPACE", "[OCP_NAMESPACE] Name of Project (namespace):");
-        this.username = setVars("OCP_USERNAME", "[OCP_USERNAME] Your OCP Username:");
-        this.password = setVars("OCP_PASSWORD", "[OCP_PASSWORD] Your OCP Password:");
+        this.namespace = setVarInput("OCP_NAMESPACE", "[OCP_NAMESPACE] Name of Project (namespace):",false);
+        this.username = setVarInput("OCP_USERNAME", "[OCP_USERNAME] Your OCP Username:",false);
+        this.password = setVarInput("OCP_PASSWORD", "[OCP_PASSWORD] Your OCP Password:",true);
 
         String[] checkers = {"OCP_CLUSTER", "OCP_NAMESPACE", "OCP_USERNAME", "OCP_PASSWORD"};
         Boolean isError = false;
@@ -46,12 +73,28 @@ public class OpenshiftClientProvider {
         }
     }
 
-    private String setVars(String envname, String question) {
+    private String setVarValue(String envname, String enval) {
         if (System.getenv(envname) != null) {
             System.setProperty(envname, System.getenv(envname));
             return System.getenv(envname);
         } else {
-            String str = tools.getInput(question);
+            System.setProperty(envname, enval);
+            return enval;
+        }
+    }
+
+    private String setVarInput(String envname, String question, Boolean isPassfield) {
+        if (System.getenv(envname) != null) {
+            System.setProperty(envname, System.getenv(envname));
+            return System.getenv(envname);
+        } else {
+            String str;
+            if (isPassfield){
+                str = tools.getInPassword(question);
+            }
+            else {
+                str = tools.getInText(question);
+            }
             System.setProperty(envname, str);
             return str;
         }
@@ -61,6 +104,7 @@ public class OpenshiftClientProvider {
         OpenShiftConfig occonfig = new OpenShiftConfigBuilder()
                 .withTrustCerts(true)
                 .withMasterUrl(this.clusterName)
+                .withNamespace(this.namespace)
                 .withUsername(this.username)
                 .withPassword(this.password)
                 .build();

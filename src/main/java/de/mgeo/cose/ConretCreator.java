@@ -2,6 +2,7 @@ package de.mgeo.cose;
 
 import de.mgeo.cose.controllers.ConfigCreatorIo;
 import de.mgeo.cose.controllers.ExportDefinition;
+import de.mgeo.cose.controllers.ModelLoader;
 import de.mgeo.cose.controllers.Storefiles;
 import de.mgeo.cose.lib.TerminalReader;
 import de.mgeo.cose.lib.Logging;
@@ -39,7 +40,7 @@ public class ConretCreator implements Runnable {
     @Option(names = {"-z", "--debug"}, description = "Enable mode DEBUG")
     private boolean isdebug;
 
-    @Option(names = {"-v", "--visible"}, description = "Make cli-inputfields viewable")
+    @Option(names = {"-s", "--secure"}, description = "Make cli-inputfields hidden")
     private boolean isvisible;
 
     @Option(names = {"-i", "--read"}, paramLabel = "FILE", description = "* Read INPUT from this YAML[s]")
@@ -61,9 +62,9 @@ public class ConretCreator implements Runnable {
         }
         System.setProperty("LOG_LEVEL", DEFAULT_LOGLEVEL);
 
-        System.setProperty("IS_VISIBLE", "FALSE");
+        System.setProperty("IS_VISIBLE", "TRUE");
         if (isvisible) {
-            System.setProperty("IS_VISIBLE", "TRUE");
+            System.setProperty("IS_VISIBLE", "FALSE");
         }
 
         if (isdebug) {
@@ -72,18 +73,28 @@ public class ConretCreator implements Runnable {
             System.setProperty("IS_VISIBLE", "TRUE");
         }
 
+
         if (cr_io) {
-            //CLIENT
-            OpenshiftClientProvider clientProvider = new OpenshiftClientProvider();
-            DefaultOpenShiftClient client = clientProvider.openShiftClient();
-            login(client);
+
 
             if (fileparam.length > 0) {
+                //CLIENT
                 File f = inputFiles[0];
-                new ConfigCreatorIo(f, client);
+                ModelLoader model = new ModelLoader(f);
+                OpenshiftClientProvider clientProvider = new OpenshiftClientProvider(model.getModel().getNamespace(), model.getModel().getCluster());
+                DefaultOpenShiftClient client = clientProvider.openShiftClient();
+                login(client);
+                new ConfigCreatorIo(client, model.getModel());
             } else if (fileparam.length > 1) {
                 for (File f : inputFiles) {
-                    new ConfigCreatorIo(f, client);
+                    //CLIENT
+                    ModelLoader model = new ModelLoader(f);
+                    //OpenshiftClientProvider clientProvider = new OpenshiftClientProvider();
+                    OpenshiftClientProvider clientProvider = new OpenshiftClientProvider(model.getModel().getNamespace(), model.getModel().getCluster());
+                    DefaultOpenShiftClient client = clientProvider.openShiftClient();
+                    login(client);
+                    //new ConfigCreatorIo(f, client);
+                    new ConfigCreatorIo(client, model.getModel());
                 }
             }
         }

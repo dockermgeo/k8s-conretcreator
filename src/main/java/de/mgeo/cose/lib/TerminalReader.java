@@ -10,7 +10,7 @@ import static java.lang.System.out;
 public class TerminalReader {
 
     public String getInput(String question) {
-        if (System.getProperty("IS_VISIBLE").equals("TRUE")) {
+        if (System.getProperty("IS_VISIBLE") != null || System.getProperty("IS_VISIBLE").equals("TRUE")) {
             return this.getInText(question);
         }
         else {
@@ -46,7 +46,6 @@ public class TerminalReader {
             System.out.println("Error trying to read your password!");
             System.exit(1);
         }
-
         consoleEraser.halt();
         return password;
     }
