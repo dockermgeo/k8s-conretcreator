@@ -1,7 +1,8 @@
 # K8 ConRet Creator
 
 
-##### Version: 2.6
+##### Stable-Version: 2.5
+##### Beta-Version: 2.6
 
 The ConRetCreator is a tool to manage your enivronments in your k8-store as kubernetes or openshift. 
 It will help you to create sets of secrets and configmaps from a defined set as yamlinut.
