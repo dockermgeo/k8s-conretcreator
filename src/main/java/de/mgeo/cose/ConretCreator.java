@@ -1,12 +1,9 @@
 package de.mgeo.cose;
 
-import de.mgeo.cose.controllers.ConfigCreatorIo;
-import de.mgeo.cose.controllers.ExportDefinition;
-import de.mgeo.cose.controllers.ModelLoader;
-import de.mgeo.cose.controllers.Storefiles;
+import de.mgeo.cose.controllers.*;
 import de.mgeo.cose.lib.TerminalReader;
 import de.mgeo.cose.lib.Logging;
-import de.mgeo.cose.lib.openshift.OpenshiftCommandProcs;
+import de.mgeo.cose.dirty.OpenshiftCommandProcs;
 import de.mgeo.cose.lib.openshift.OpenshiftClientProvider;
 import io.fabric8.openshift.client.DefaultOpenShiftClient;
 import org.slf4j.Logger;
@@ -43,6 +40,9 @@ public class ConretCreator implements Runnable {
     @Option(names = {"-s", "--secure"}, description = "Make cli-inputfields hidden")
     private boolean isvisible;
 
+    @Option(names = {"-w", "--worker"}, description = "Current devlopment")
+    private boolean iswork;
+
     @Option(names = {"-i", "--read"}, paramLabel = "FILE", description = "* Read INPUT from this YAML[s]")
     private boolean[] fileparam = new boolean[0];
 
@@ -74,9 +74,20 @@ public class ConretCreator implements Runnable {
         }
 
 
+        if(iswork) {
+            if (fileparam.length > 0) {
+                ModelLoader model = new ModelLoader(inputFiles[0]);
+                new SecretFileCreatorIo(model.getModel());
+            } else if (fileparam.length > 1) {
+                for (File f : inputFiles) {
+                    ModelLoader model = new ModelLoader(f);
+                    new SecretFileCreatorIo(model.getModel());
+                }
+            }
+        }
+
+
         if (cr_io) {
-
-
             if (fileparam.length > 0) {
                 //CLIENT
                 File f = inputFiles[0];
@@ -111,15 +122,16 @@ public class ConretCreator implements Runnable {
 //            }
 //        }
 
+
         if (storefiles) {
             OpenshiftCommandProcs occ = new OpenshiftCommandProcs();
             login(occ);
             if (fileparam.length > 0) {
                 File f = inputFiles[0];
-                new Storefiles(f);
+                new StorefilesOc(f);
             } else if (fileparam.length > 1) {
                 for (File f : inputFiles) {
-                    new Storefiles(f);
+                    new StorefilesOc(f);
                 }
             }
         }

@@ -19,7 +19,6 @@ import java.util.Map;
 
 public class ConfigCreatorIo {
     private static TerminalReader tools = new TerminalReader();
-    //private final static Logger log = LoggerFactory.getLogger(ConfigCreatorIo.class);
     private static Logging logging = new Logging(ConfigCreatorIo.class.toString());
     private static Logger log = logging.getLogger();
 

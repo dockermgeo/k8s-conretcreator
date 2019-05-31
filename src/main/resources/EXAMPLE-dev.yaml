@@ -1,13 +1,13 @@
 clustername: "https://cluster-dev.mgeo.de"
-namespace: "mgeo-etu"
+namespace: "play-with-configs"
 name: "mgeo-dev-io"
 # kind: Secret or ConfigMap
 kind: Secret
 files:
 # relativepath to this file
-  - file: "files/stages/log4j-prod.properties"
+  - src: "files/stages/log4j-prod.properties"
     target: "log4j.properties"
-  - file: "files/debugger.properties"
+  - src: "files/debugger.properties"
 # no target means, take the original name
     target: ""
 data:

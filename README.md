@@ -1,7 +1,7 @@
 # K8 ConRet Creator
 
 
-##### Version: 2.3
+##### Version: 2.6
 
 The ConRetCreator is a tool to manage your enivronments in your k8-store as kubernetes or openshift. 
 It will help you to create sets of secrets and configmaps from a defined set as yamlinut.
@@ -66,11 +66,11 @@ You can use our Scripts, "run.sh" for OSx/Linux or "run.bat" on Windows.
 Empty **values** will filled by CLI.
 
 ```
-    # Secret | ConfigMap
+    clustername: "https://cluster-dev.mgeo.de"
+    namespace: "play-with-configs"
+    name: "mgeo-dev-io"
+    # kind: Secret or ConfigMap
     kind: Secret
-    
-    # Name of your set
-    name: mgeo-dev
     
     # Datablock, will include your definitions
     data:
@@ -81,13 +81,16 @@ Empty **values** will filled by CLI.
         value: admin
         desc: "Name of User"
       - name: password
+    # if value is empty, CLI will ask for it
         value: ""
-        desc: "Password will set by CLI or by ENV-Variable"
+        desc: "Password will set by CLI"
+
+    # FILES as secret
     files:
     # relativepath to this file
-      - file: "files/stages/log4j-prod.properties"
+      - src: "files/stages/log4j-prod.properties"
         target: "log4j.properties"
-      - file: "files/debugger.yaml"
+      - src: "files/debugger.properties"
     # no target means, take the original name
         target: ""
 ```

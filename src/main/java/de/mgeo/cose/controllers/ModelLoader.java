@@ -32,6 +32,7 @@ public class ModelLoader {
         model.setAppname(yamlMaps.get("name") + "");
         model.setCluster(yamlMaps.get("clustername") + "");
         model.setKind(yamlMaps.get("kind") + "");
+        model.setInputfile(inputfile);
     }
 
     public RunModel getModel() {

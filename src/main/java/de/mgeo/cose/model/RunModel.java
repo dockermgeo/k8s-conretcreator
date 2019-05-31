@@ -1,5 +1,6 @@
 package de.mgeo.cose.model;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +12,7 @@ public class RunModel {
     private String namespace;
     private List<Map<String, Object>> dataObjectList;
     private List<Map<String, Object>> filesObjectList;
+    private File inputfile;
 
     public String getKind() {
         return kind;
@@ -58,5 +60,16 @@ public class RunModel {
 
     public void setFilesObjectList(List<Map<String, Object>> filesObjectList) {
         this.filesObjectList = filesObjectList;
+    }
+
+    public void setInputfile(File inputfile) {
+        this.inputfile=inputfile;
+    }
+
+    public File getInputfile() {
+        return inputfile;
+    }
+    public String getBasedir() {
+        return this.inputfile.getParent();
     }
 }
