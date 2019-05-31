@@ -5,4 +5,4 @@
 - [x] Check Login()
 - [ ] using kubernetes java lib also for filesecrerts
 - [x] Make Inputfields hidden 
-- [ ] Get Namespace and Cluster from INPUT-YML
+- [x] Get Namespace and Cluster from INPUT-YML
