@@ -23,7 +23,8 @@ To add values to your store, you need your **input file**, maybe your dependent 
 In this case, you can give this all by an email or by vcs to a other guy (Production) to setup your Store.
 
 
-![ConRetCreator](docs/conretcreator.png)
+>[![ConRetCreator](docs/conretcreator_small.png)](docs/conretcreator.png)
+>[Click for Zoom](docs/conretcreator.png)
 
 
 ## Install
