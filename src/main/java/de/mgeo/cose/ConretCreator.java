@@ -1,9 +1,11 @@
 package de.mgeo.cose;
 
-import de.mgeo.cose.controllers.*;
-import de.mgeo.cose.lib.TerminalReader;
+import de.mgeo.cose.controllers.ConfigCreator;
+import de.mgeo.cose.controllers.ExportDefinition;
+import de.mgeo.cose.controllers.ModelLoader;
+import de.mgeo.cose.controllers.SecretFileCreatorIo;
 import de.mgeo.cose.lib.Logging;
-import de.mgeo.cose.dirty.OpenshiftCommandProcs;
+import de.mgeo.cose.lib.TerminalReader;
 import de.mgeo.cose.lib.openshift.OpenshiftClientProvider;
 import io.fabric8.openshift.client.DefaultOpenShiftClient;
 import org.slf4j.Logger;
@@ -26,13 +28,10 @@ public class ConretCreator implements Runnable {
     //private boolean cr_oc;
 
     @Option(names = {"-c", "--create"}, description = "Create/Replace a Secret or ConfigMap")
-    private boolean cr_io;
-
-    @Option(names = {"-f", "--secrets-fs"}, description = "Create/Replace Secrets from filesystem")
-    private boolean storefiles;
+    private boolean createconfig;
 
     @Option(names = {"-x", "--export"}, description = "Print usage to stdout. The definition for the k8 spec.")
-    private boolean xport;
+    private boolean exportview;
 
     @Option(names = {"-z", "--debug"}, description = "Enable mode DEBUG")
     private boolean isdebug;
@@ -40,8 +39,8 @@ public class ConretCreator implements Runnable {
     @Option(names = {"-s", "--secure"}, description = "Make cli-inputfields hidden")
     private boolean isvisible;
 
-    @Option(names = {"-w", "--worker"}, description = "Current devlopment")
-    private boolean iswork;
+    @Option(names = {"-f", "--secrets-fs"}, description = "Create/Replace Secrets from filesystem")
+    private boolean storefiles;
 
     @Option(names = {"-i", "--read"}, paramLabel = "FILE", description = "* Read INPUT from this YAML[s]")
     private boolean[] fileparam = new boolean[0];
@@ -74,93 +73,30 @@ public class ConretCreator implements Runnable {
         }
 
 
-        if(iswork) {
-            if (fileparam.length > 0) {
-                ModelLoader model = new ModelLoader(inputFiles[0]);
-                new SecretFileCreatorIo(model.getModel());
-            } else if (fileparam.length > 1) {
-                for (File f : inputFiles) {
-                    ModelLoader model = new ModelLoader(f);
-                    new SecretFileCreatorIo(model.getModel());
+        if (fileparam.length > 0) {
+            if (createconfig) {
+                this.startConfigCreator(inputFiles[0]);
+            }
+            if (storefiles) {
+                this.startSecretFileCreator(inputFiles[0]);
+            }
+            if (exportview) {
+                new ExportDefinition(inputFiles[0]);
+            }
+        } else if (fileparam.length > 1) {
+            for (File f : inputFiles) {
+                if (createconfig) {
+                    this.startConfigCreator(inputFiles[0]);
+                }
+                if (storefiles) {
+                    this.startSecretFileCreator(inputFiles[0]);
+                }
+                if (exportview) {
+                    new ExportDefinition(inputFiles[0]);
                 }
             }
         }
 
-
-        if (cr_io) {
-            if (fileparam.length > 0) {
-                //CLIENT
-                File f = inputFiles[0];
-                ModelLoader model = new ModelLoader(f);
-                OpenshiftClientProvider clientProvider = new OpenshiftClientProvider(model.getModel().getNamespace(), model.getModel().getCluster());
-                DefaultOpenShiftClient client = clientProvider.openShiftClient();
-                login(client);
-                new ConfigCreatorIo(client, model.getModel());
-            } else if (fileparam.length > 1) {
-                for (File f : inputFiles) {
-                    //CLIENT
-                    ModelLoader model = new ModelLoader(f);
-                    //OpenshiftClientProvider clientProvider = new OpenshiftClientProvider();
-                    OpenshiftClientProvider clientProvider = new OpenshiftClientProvider(model.getModel().getNamespace(), model.getModel().getCluster());
-                    DefaultOpenShiftClient client = clientProvider.openShiftClient();
-                    login(client);
-                    //new ConfigCreatorIo(f, client);
-                    new ConfigCreatorIo(client, model.getModel());
-                }
-            }
-        }
-
-//        if (cr_oc) {
-//            login(occ);
-//            if (fileparam.length > 0) {
-//                File f = inputFiles[0];
-//                new ConfigCreatorOc(f);
-//            } else if (fileparam.length > 1) {
-//                for (File f : inputFiles) {
-//                    new ConfigCreatorOc(f);
-//                }
-//            }
-//        }
-
-
-        if (storefiles) {
-            OpenshiftCommandProcs occ = new OpenshiftCommandProcs();
-            login(occ);
-            if (fileparam.length > 0) {
-                File f = inputFiles[0];
-                new StorefilesOc(f);
-            } else if (fileparam.length > 1) {
-                for (File f : inputFiles) {
-                    new StorefilesOc(f);
-                }
-            }
-        }
-
-
-        if (xport) {
-            if (fileparam.length > 0) {
-                File f = inputFiles[0];
-                new ExportDefinition(f);
-            } else if (fileparam.length > 1) {
-                for (File f : inputFiles) {
-                    new ExportDefinition(f);
-                }
-            }
-        }
-    }
-
-    private void login(OpenshiftCommandProcs occ) {
-        TerminalReader apt = new TerminalReader();
-
-        if (occ.isLogin() == false) {
-            log.error("You must be logged in, into your K8-System!");
-            System.exit(0);
-        }
-
-        System.out.println("\nWorking on:");
-        System.out.println("\t- CLUSTER: " + occ.getClusterName().replaceAll("\n", ""));
-        System.out.println("\t- PROJECT: " + occ.getNamespaceName().replaceAll("\n", "").replaceAll("\"", ""));
-        System.out.println("");
     }
 
     private void login(DefaultOpenShiftClient client) {
@@ -178,6 +114,24 @@ public class ConretCreator implements Runnable {
             log.error("Can't establish connection to cluster (" + client.getMasterUrl() + ")");
             System.exit(0);
         }
+    }
+
+    private void startConfigCreator(File f) {
+        //CLIENT
+        ModelLoader model = new ModelLoader(f);
+        OpenshiftClientProvider clientProvider = new OpenshiftClientProvider(model.getModel().getNamespace(), model.getModel().getCluster());
+        DefaultOpenShiftClient client = clientProvider.openShiftClient();
+        login(client);
+        new ConfigCreator(client, model.getModel());
+    }
+
+    private void startSecretFileCreator(File f) {
+        //CLIENT
+        ModelLoader model = new ModelLoader(f);
+        OpenshiftClientProvider clientProvider = new OpenshiftClientProvider(model.getModel().getNamespace(), model.getModel().getCluster());
+        DefaultOpenShiftClient client = clientProvider.openShiftClient();
+        login(client);
+        new SecretFileCreatorIo(client, model.getModel());
     }
 
 

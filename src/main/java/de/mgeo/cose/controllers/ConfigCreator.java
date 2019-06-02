@@ -17,12 +17,12 @@ import java.io.Reader;
 import java.util.List;
 import java.util.Map;
 
-public class ConfigCreatorIo {
+public class ConfigCreator {
     private static TerminalReader tools = new TerminalReader();
-    private static Logging logging = new Logging(ConfigCreatorIo.class.toString());
+    private static Logging logging = new Logging(ConfigCreator.class.toString());
     private static Logger log = logging.getLogger();
 
-    public ConfigCreatorIo(DefaultOpenShiftClient client, RunModel model) {
+    public ConfigCreator(DefaultOpenShiftClient client, RunModel model) {
         List<Map<String, Object>> dataList = model.getDataObjectList();
 
         // Creating DATA-Set
@@ -69,7 +69,7 @@ public class ConfigCreatorIo {
     }
 
 
-    public ConfigCreatorIo(File inputfile, DefaultOpenShiftClient client) {
+    public ConfigCreator(File inputfile, DefaultOpenShiftClient client) {
         Yaml yaml = new Yaml();
         Reader yamlFile = null;
 
