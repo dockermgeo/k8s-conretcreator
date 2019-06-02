@@ -1,7 +1,7 @@
 # K8 ConRet Creator
 
 
-##### Stable-Version: 2.6
+##### Stable-Version: 2.78
 
 The ConRetCreator is a tool to manage your enivronments in your k8-store as kubernetes or openshift without a 
 local installation of kubctl or oc.
