@@ -46,8 +46,8 @@ public class ConretCreator implements Runnable {
     @Option(names = {"-f", "--secrets-fs"}, description = "Create/Replace Secrets from filesystem")
     private boolean storefiles;
 
-    @Option(names = {"-r", "--createroute"}, description = "** DEV ** Create Router")
-    private boolean createroute;
+//    @Option(names = {"-r", "--createroute"}, description = "** DEV ** Create Router")
+//    private boolean createroute;
 
     @Option(names = {"-i", "--read"}, paramLabel = "FILE", description = "* Read INPUT from this YAML[s]")
     private boolean[] fileparam = new boolean[0];
@@ -81,9 +81,9 @@ public class ConretCreator implements Runnable {
 
 
         if (fileparam.length > 0) {
-            if (createroute) {
-                this.startRoute(inputFiles[0]);
-            }
+//            if (createroute) {
+//                this.startRoute(inputFiles[0]);
+//            }
             if (createconfig) {
                 this.startConfigCreator(inputFiles[0]);
             }
