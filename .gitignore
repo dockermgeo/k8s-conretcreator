@@ -1,12 +1,12 @@
+.DS_Store
 *.log
 *.lock
 *.tmp
 *.source
-.DS_Store
 .gen*
-.idea
-.dev
 *.iml
 *.old
+.dev
 .old/
+.idea
 target/
