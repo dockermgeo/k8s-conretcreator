@@ -37,8 +37,7 @@ In this case, you can give this all by an email or by vcs to a other guy (Produc
 
 ## Dependencies
 - JDK 1.8 or higher
-- Lower versions than **2.3** of conretcreator depends a installed **oc** or **kubectl** on your System.
-- Version **2.4** or lower, on function **-f**/**--secrets-fs** a oc-installation is needed!   
+- Lower versions than **2.4** of conretcreator depends a installed **oc** or **kubectl** on your System.   
 
 ## SYNTAX
 ``` 
