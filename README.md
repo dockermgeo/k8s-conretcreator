@@ -150,7 +150,7 @@ I defined some [special Variable](src/main/resources/) values in fr-EXAMPLE-<***
 Show as it works.
 
 ```
-./run.sh -c -s -i sets/EXAMPLE-dev.yaml 
+./run.sh -c f -i sets/EXAMPLE-dev.yaml -z 
 
 Working on:
 	- CLUSTER: dev.mgeo.local
