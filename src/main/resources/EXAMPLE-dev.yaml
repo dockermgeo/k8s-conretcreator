@@ -21,3 +21,7 @@ data:
 # if value is empty, CLI will ask for it
     value: ""
     desc: "Password will set by CLI"
+#routes:
+#  - host: ""
+#    path: ""
+#    service: ""
