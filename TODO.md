@@ -3,6 +3,6 @@
 - [ ] different endsystems like docker-native/swarm
 - [x] openshift kubernetes java lib
 - [x] Check Login()
-- [ ] using kubernetes java lib also for filesecrerts
+- [x] using kubernetes java lib also for filesecrerts
 - [x] Make Inputfields hidden 
 - [x] Get Namespace and Cluster from INPUT-YML
