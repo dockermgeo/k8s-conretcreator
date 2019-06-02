@@ -9,3 +9,5 @@
 *.old
 .old/
 target/
+dev/
+dev/**
