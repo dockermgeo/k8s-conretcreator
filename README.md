@@ -22,8 +22,8 @@ With this logic definitions can be stored and distributed in a VCS. Furthermore,
 To add values to your store, you need your **input file**, maybe your dependent files and Java-based tool "**conretcreator.jar**". 
 In this case, you can give this all by an email or by vcs to a other guy (Production) to setup your Store.
 
+[![ConRetCreator](docs/conretcreator_small.png)](docs/conretcreator.png)
 
->[![ConRetCreator](docs/conretcreator_small.png)](docs/conretcreator.png)
 >[Click for Zoom](docs/conretcreator.png)
 
 
