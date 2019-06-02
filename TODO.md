@@ -1,8 +1,11 @@
 # Function List:
+- [x] Create ConfigMap or Secret
+- [x] Create Secret as files
 - [x] LoggingFramework working with parameter -z
-- [ ] different endsystems like docker-native/swarm
-- [x] openshift kubernetes java lib
-- [x] Check Login()
-- [x] using kubernetes java lib also for filesecrerts
 - [x] Make Inputfields hidden 
+- [ ] different endsystems like docker-native/swarm
+- [x] Check Login()
+- [x] openshift kubernetes java lib for Configs
+- [x] openshift kubernetes java lib for Files
 - [x] Get Namespace and Cluster from INPUT-YML
+- [ ] Create Route functionality (-r --route)
