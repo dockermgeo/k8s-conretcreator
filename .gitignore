@@ -5,9 +5,8 @@
 .DS_Store
 .gen*
 .idea
+.dev
 *.iml
 *.old
 .old/
 target/
-dev/
-dev/**
