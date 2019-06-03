@@ -28,6 +28,7 @@ public class ModelLoader {
         Map<String, Object> yamlMaps = yaml.load(yamlFile);
         model.setDataObjectList ( (List<Map<String, Object>>) yamlMaps.get("data"));
         model.setFilesObjectList ( (List<Map<String, Object>>) yamlMaps.get("files"));
+        model.setRoutesObjectList ( (List<Map<String, Object>>) yamlMaps.get("routes"));
         model.setNamespace(yamlMaps.get("namespace") + "");
         model.setAppname(yamlMaps.get("name") + "");
         model.setCluster(yamlMaps.get("clustername") + "");

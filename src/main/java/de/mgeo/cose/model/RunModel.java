@@ -12,6 +12,7 @@ public class RunModel {
     private String namespace;
     private List<Map<String, Object>> dataObjectList;
     private List<Map<String, Object>> filesObjectList;
+    private List<Map<String, Object>> routesObjectList;
     private File inputfile;
 
     public String getKind() {
@@ -71,5 +72,13 @@ public class RunModel {
     }
     public String getBasedir() {
         return this.inputfile.getParent();
+    }
+
+    public void setRoutesObjectList(List<Map<String, Object>> routes) {
+        this.routesObjectList=routes;
+    }
+
+    public List<Map<String, Object>> getRoutesObjectList() {
+        return routesObjectList;
     }
 }

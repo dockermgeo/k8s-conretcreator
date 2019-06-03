@@ -5,6 +5,10 @@ import de.mgeo.cose.model.StoreConfigMap;
 import de.mgeo.cose.model.StoreSecret;
 import io.fabric8.kubernetes.api.model.*;
 import io.fabric8.kubernetes.client.dsl.Resource;
+import io.fabric8.openshift.api.model.Route;
+import io.fabric8.openshift.api.model.RouteSpec;
+import io.fabric8.openshift.api.model.RouteTargetReference;
+import io.fabric8.openshift.api.model.TLSConfig;
 import io.fabric8.openshift.client.DefaultOpenShiftClient;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -59,6 +63,47 @@ public class OpenshiftStore {
         } finally {
             client.close();
         }
+    }
+
+    public void createRoute(String servicename, String hostname, String routepath) {
+        String plainpath=routepath;
+        if (!routepath.substring(0,1).equals("/")) {
+            routepath="/"+routepath;
+        }
+        else {
+            plainpath=routepath.substring(1);
+        }
+
+        Route routeapi = new Route();
+        routeapi.setApiVersion("v1");
+        routeapi.setKind("Route");
+
+
+        ObjectMeta metadata = new ObjectMeta();
+        metadata.setName("r-"+servicename+"-"+plainpath);
+        routeapi.setMetadata(metadata);
+
+        RouteSpec spec=new RouteSpec();
+        spec.setHost(hostname);
+        spec.setPath(routepath);
+
+        TLSConfig tls= new TLSConfig();
+        tls.setTermination("edge");
+        spec.setTls(tls);
+
+        RouteTargetReference to = new RouteTargetReference();
+        to.setKind("Service");
+        to.setName(servicename);
+        spec.setTo(to);
+
+        routeapi.setSpec(spec);
+
+        try{
+            client.routes().createOrReplace(routeapi);
+        }catch(Exception re) {
+            log.error(re.getMessage());
+        }
+
     }
 
     /*

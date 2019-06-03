@@ -1,12 +1,10 @@
 package de.mgeo.cose;
 
-import de.mgeo.cose.controllers.ConfigCreator;
-import de.mgeo.cose.controllers.ExportDefinition;
-import de.mgeo.cose.controllers.ModelLoader;
-import de.mgeo.cose.controllers.SecretFileCreatorIo;
+import de.mgeo.cose.controllers.*;
 import de.mgeo.cose.lib.Logging;
 import de.mgeo.cose.lib.TerminalReader;
 import de.mgeo.cose.lib.openshift.OpenshiftClientProvider;
+import de.mgeo.cose.lib.openshift.OpenshiftStore;
 import io.fabric8.openshift.api.model.Route;
 import io.fabric8.openshift.api.model.RouteList;
 import io.fabric8.openshift.api.model.RouteSpec;
@@ -142,25 +140,28 @@ public class ConretCreator implements Runnable {
         OpenshiftClientProvider clientProvider = new OpenshiftClientProvider(model.getModel().getNamespace(), model.getModel().getCluster());
         DefaultOpenShiftClient client = clientProvider.openShiftClient();
 
-        try {
-            //System.out.println(client.routes().list().toString());
-            RouteList routes = client.routes().list();
-            List<Route> r_items = routes.getItems();
-            for (int r=0; r<r_items.size();r++){
-                Route r_entry = r_items.get(r);
-                System.out.println("\n\nkind: "+r_entry.getKind().toString());
-                RouteSpec r_spec = r_entry.getSpec();
-                System.out.println("host: "+r_entry.getSpec().getHost());
-                System.out.println("path: "+r_entry.getSpec().getPath());
-                System.out.println("port: "+r_entry.getSpec().getPort());
-                System.out.println("TLS: "+r_entry.getSpec().getTls().toString());
-                System.out.println("name: "+r_entry.getSpec().getTo().getName());
-                System.out.println("kind: "+r_entry.getSpec().getTo().getKind());
-            }
-        }
-        catch(Exception ex) {
-            log.error(ex.getMessage());
-        }
+//        try {
+//            //System.out.println(client.routes().list().toString());
+//            RouteList routes = client.routes().list();
+//            List<Route> r_items = routes.getItems();
+//            for (int r=0; r<r_items.size();r++){
+//                Route r_entry = r_items.get(r);
+//                System.out.println("\n\nkind: "+r_entry.getKind().toString());
+//                RouteSpec r_spec = r_entry.getSpec();
+//                System.out.println("host: "+r_entry.getSpec().getHost());
+//                System.out.println("path: "+r_entry.getSpec().getPath());
+//                System.out.println("port: "+r_entry.getSpec().getPort());
+//                System.out.println("TLS: "+r_entry.getSpec().getTls().toString());
+//                System.out.println("name: "+r_entry.getSpec().getTo().getName());
+//                System.out.println("kind: "+r_entry.getSpec().getTo().getKind());
+//            }
+//        }
+//        catch(Exception ex) {
+//            log.error(ex.getMessage());
+//        }
+
+        new RouteCreator(client,model.getModel());
+
     }
 
     private void startSecretFileCreator(File f) {
