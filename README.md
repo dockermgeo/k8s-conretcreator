@@ -1,7 +1,7 @@
 # K8 ConRet Creator
 
 
-##### Stable-Version: 2.6
+##### Stable-Version: 2.7
 
 The ConRetCreator is a tool to manage your enivronments in your k8-store as kubernetes or openshift without a 
 local installation of kubctl or oc.
@@ -53,6 +53,7 @@ In this case, you can give this all by an email or by vcs to a other guy (Produc
 | **-i FILE-A FILE-B**      | **Inputfile or -files** in YAML-Format |
 | -h      | help, show usage|
 | -f      | Create/Replace Secrets from filesystem |
+| -r      | Create/Replace Path Router |
 | -x      | export/display section defintion for container-env |
 | -z      | debug - do not delete any generated files and show commands |
 
@@ -94,6 +95,14 @@ Empty **values** will filled by CLI.
       - src: "files/debugger.properties"
     # no target means, take the original name
         target: ""
+# Additional Route-entries
+routes:
+  - host: "myhost"
+    path: "/path1"
+    targetservice: "myapp"
+  - host: "myhost"
+    path: "/path2"
+    targetservice: "myapp"
 ```
 
 ## Get output for k8s-definiton 
