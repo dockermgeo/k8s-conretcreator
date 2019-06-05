@@ -1,5 +1,5 @@
 APP=conretcreator
-APP_VER=2.7
+APP_VER=2.8
 JAVA_VERSION="jdk18"
 JAR="${APP}-${JAVA_VERSION}-${APP_VER}.jar"
 

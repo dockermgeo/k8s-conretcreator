@@ -17,13 +17,18 @@ public class ExportDefinition {
         try {
             yamlFile = new FileReader(inputFile.getAbsoluteFile());
             Map<String, Object> yamlMaps = yaml.load(yamlFile);
-            final List<Map<String, Object>> DATA = (List<Map<String, Object>>) yamlMaps.get("data");
+            final List<Map<String, Object>> DATA_CFM = (List<Map<String, Object>>) yamlMaps.get("configs");
+            final List<Map<String, Object>> DATA_SEC = (List<Map<String, Object>>) yamlMaps.get("secrets");
 
             String corename = yamlMaps.get("name") + "";
             addOut("containers:");
             addOut("\tenv:");
-            for (int z = 0; z < DATA.size(); z++) {
-                Object name = DATA.get(z).get("name");
+            for (int c= 0; c < DATA_CFM.size(); c++) {
+                Object name = DATA_CFM.get(c).get("name");
+                printConfigmapstyle(corename, name.toString().toUpperCase(), name.toString());
+            }
+            for (int s = 0; s < DATA_SEC.size(); s++) {
+                Object name = DATA_SEC.get(s).get("name");
                 printSecretstyle(corename, name.toString().toUpperCase(), name.toString());
             }
             printVolumestyle(corename);

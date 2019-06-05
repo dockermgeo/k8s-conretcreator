@@ -8,4 +8,5 @@
 - [x] openshift kubernetes java lib for Configs
 - [x] openshift kubernetes java lib for Files
 - [x] Get Namespace and Cluster from INPUT-YML
-- [ ] Create Route functionality (-r --route)
+- [x] Create Route functionality (-r --route)
+- [x] Split singleprocess for Configmaps and Secrets 

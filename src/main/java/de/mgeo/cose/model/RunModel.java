@@ -6,22 +6,14 @@ import java.util.Map;
 
 public class RunModel {
 
-    private String kind;
     private String appname;
     private String cluster;
     private String namespace;
-    private List<Map<String, Object>> dataObjectList;
+    private List<Map<String, Object>> dataCfmObjectList;
+    private List<Map<String, Object>> dataSecObjectList;
     private List<Map<String, Object>> filesObjectList;
     private List<Map<String, Object>> routesObjectList;
     private File inputfile;
-
-    public String getKind() {
-        return kind;
-    }
-
-    public void setKind(String kind) {
-        this.kind = kind;
-    }
 
     public String getAppname() {
         return appname;
@@ -47,38 +39,48 @@ public class RunModel {
         this.namespace = namespace;
     }
 
-    public List<Map<String, Object>> getDataObjectList() {
-        return dataObjectList;
-    }
-
-    public void setDataObjectList(List<Map<String, Object>> dataObjectList) {
-        this.dataObjectList = dataObjectList;
+    public void setFilesObjectList(List<Map<String, Object>> secretfiles) {
+        this.filesObjectList=secretfiles;
     }
 
     public List<Map<String, Object>> getFilesObjectList() {
         return filesObjectList;
     }
 
-    public void setFilesObjectList(List<Map<String, Object>> filesObjectList) {
-        this.filesObjectList = filesObjectList;
-    }
-
     public void setInputfile(File inputfile) {
-        this.inputfile=inputfile;
+        this.inputfile = inputfile;
     }
 
     public File getInputfile() {
         return inputfile;
     }
+
     public String getBasedir() {
         return this.inputfile.getParent();
     }
 
     public void setRoutesObjectList(List<Map<String, Object>> routes) {
-        this.routesObjectList=routes;
+        this.routesObjectList = routes;
     }
 
     public List<Map<String, Object>> getRoutesObjectList() {
         return routesObjectList;
     }
+
+    public List<Map<String, Object>> getDataCfmObjectList() {
+        return dataCfmObjectList;
+    }
+
+    public void setDataCfmObjectList(List<Map<String, Object>> configs) {
+        this.dataCfmObjectList = configs;
+    }
+
+    public List<Map<String, Object>> getDataSecObjectList() {
+        return dataSecObjectList;
+    }
+
+    public void setDataSecObjectList(List<Map<String, Object>> secrets) {
+        this.dataSecObjectList = secrets;
+    }
+
 }

@@ -49,12 +49,15 @@ In this case, you can give this all by an email or by vcs to a other guy (Produc
 
 | Option        | Description |
 | ------------- |-------------| 
-| -c      | Create/Replace a Secret or ConfigMap |
 | **-i FILE-A FILE-B**      | **Inputfile or -files** in YAML-Format |
-| -h      | help, show usage|
+| -c      | Create/Replace a ConfigMap |
+| -s      | Create/Replace a Secret  |
 | -f      | Create/Replace Secrets from filesystem |
 | -r      | Create/Replace Path Router |
+| -a      | Create/Replace of all above |
+| -h      | help, show usage|
 | -x      | export/display section defintion for container-env |
+| -v      | make all cli inputs hidden |
 | -z      | debug - do not delete any generated files and show commands |
 
 
@@ -74,21 +77,24 @@ Empty **values** will filled by CLI.
     # kind: Secret or ConfigMap
     kind: Secret
     
-    # Datablock, will include your definitions
-    data:
+    # Datablock for configmap
+    configs:
       - name: loglevel
         value: debug
         desc: "Loglevel for the APP"
+    
+    # Datablock for secrets
+    secrets:
       - name: username
         value: admin
         desc: "Name of User"
       - name: password
-    # if value is empty, CLI will ask for it
+        # if value is empty, CLI will ask for it
         value: ""
         desc: "Password will set by CLI"
 
     # FILES as secret
-    files:
+    secretfiles:
     # relativepath to this file
       - src: "files/stages/log4j-prod.properties"
         target: "log4j.properties"
@@ -121,11 +127,11 @@ With the **parameter -x** the necessary Templatedefinition can be output to Stdo
 
 Usage as secret
 ```
-    - name: LOGLEVEL
+    - name: USERNAME
       valueFrom:
         secretKeyRef:
             name: mgeo-dev-secs
-            key: loglevel
+            key: username
 ```
 
 Usage as configmap
@@ -159,7 +165,7 @@ I defined some [special Variable](src/main/resources/) values in fr-EXAMPLE-<***
 Show as it works.
 
 ```
-./run.sh -c f -i sets/EXAMPLE-dev.yaml -z 
+./run.sh -i sets/EXAMPLE-dev.yaml -c -s f -r  -z 
 
 Working on:
 	- CLUSTER: dev.mgeo.local
@@ -167,8 +173,10 @@ Working on:
 
 Give me the Adminpassword
 supergeheim
+[ok]	Creating configmap 'mgeo-dev'
 [ok]	Creating secret 'mgeo-dev'
 [ok]	Creating filesecret 'mgeo-dev-files'
+[ok]	Creating Routes for 'mgeo-dev'
 
 ```
 

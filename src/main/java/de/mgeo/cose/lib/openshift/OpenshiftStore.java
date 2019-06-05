@@ -44,7 +44,7 @@ public class OpenshiftStore {
                     .withName(dataSecret.getName())
                     .withNamespace(client.getNamespace())
                     .endMetadata()
-                    .withType("opaque")
+                    .withType("Opaque")
                     .withStringData(dataSecret.getData())
                     .build());
         } finally {
