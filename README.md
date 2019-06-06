@@ -1,11 +1,11 @@
-# K8 ConRet Creator
+# K8-ConRet-Creator
 
 
-##### Stable-Version: 2.7
+##### Stable-Version: 2.8
 
-The ConRetCreator is a tool to manage your enivronments in your k8-store as kubernetes or openshift without a 
+The ConRetCreator is a tool to manage your environmentsettings in your k8-store as kubernetes or openshift without a 
 local installation of kubctl or oc.
-It will help you to create sets of secrets and configmaps from a defined set as yamlinut.
+It will help you to create sets of secrets and configmaps from a defined set as yaml-Input.
 If a value is empty, CLI will ask you interactive for this value or take it from exported ENV-Variable. 
 
 With this logic definitions can be stored and distributed in a VCS. Furthermore, it can be avoided that passwords, for example, are not stored.
